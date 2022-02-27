@@ -1,1 +1,5 @@
-# react-rails
+# Management Screen
+## Frontend
+- React
+## Backend
+- Rails API
