@@ -30,7 +30,7 @@ module Api
         def update
           user = User.find(params[:id])
   
-          if user.update_attributes(user_params)
+          if user.update(user_params)
             render json: {status: 'SUCCESS', message: 'Updated user', data: user}, status: :ok
           else
             render json: {status: 'ERROR', message: 'User not updated', data: user.errors}, status: :unprocessable_entity
