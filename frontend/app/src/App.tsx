@@ -8,6 +8,7 @@ const App = () => {
   const [users, setUsers] = useState([])
   const [values, setValues] = useState({name: '', email: ''})
   const [values2, setValues2] = useState({id: '', name2: '', email2: ''})
+  const [values3, setValues3] = useState({deletedId: ''})
 
 
 
@@ -43,6 +44,16 @@ const App = () => {
     fetchUsers()
   }
 
+  const deleteUser = async () => {
+    const response = await axios({
+      method: 'delete',
+      url: `http://localhost:3001/api/v1/users/` + values3.deletedId.toString(),
+      withCredentials: false,
+      headers: {'Access-Control-Allow-Origin' : '*'}
+    })
+    fetchUsers()
+  }
+
   const doChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value
     const key = e.target.name
@@ -53,6 +64,11 @@ const App = () => {
     const newValue = e.target.value
     const key = e.target.name
     setValues2({...values2, [key]: newValue})
+  }
+  const doChange3 = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = e.target.value
+    const key = e.target.name
+    setValues3({...values3, [key]: newValue})
   }
   const doCreate = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -66,6 +82,13 @@ const App = () => {
     const data = JSON.stringify(values2)
     window.alert(data)
     updateUser()
+  }
+  
+  const doDelete = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    const data = JSON.stringify(values3)
+    window.alert(data)
+    deleteUser()
   }
 
   useEffect (() => {
@@ -130,6 +153,18 @@ const App = () => {
                 onChange={doChange2}
               />
               <input type="submit" value="Update" />
+            </form>
+        </div>
+        <div>
+        <form onSubmit={doDelete}>
+             id:
+              <input 
+                type="number" 
+                name="deletedId"
+                value={values3.deletedId}
+                onChange={doChange3}
+              />
+              <input type="submit" value="Delete" />
             </form>
         </div>
         <div>
