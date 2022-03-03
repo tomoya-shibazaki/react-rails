@@ -7,6 +7,8 @@ import axios from "axios"
 const App = () => {
   const [users, setUsers] = useState([])
   const [values, setValues] = useState({name: '', email: ''})
+  const [values2, setValues2] = useState({id: '', name2: '', email2: ''})
+
 
 
   const fetchUsers = async () => {
@@ -29,17 +31,41 @@ const App = () => {
     })
     fetchUsers()
   }
+  const updateUser = async () => {
+    const data = {'name': values2.name2, 'email': values2.email2}
+    const response = await axios({
+      method: 'put',
+      url: `http://localhost:3001/api/v1/users/` + values2.id.toString(),
+      withCredentials: false,
+      headers: {'Access-Control-Allow-Origin' : '*'},
+      data: data
+    })
+    fetchUsers()
+  }
 
   const doChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value
     const key = e.target.name
     setValues({...values, [key]: newValue})
   }
-  const doSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+
+  const doChange2 = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = e.target.value
+    const key = e.target.name
+    setValues2({...values2, [key]: newValue})
+  }
+  const doCreate = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     const data = JSON.stringify(values)
     window.alert(data)
     createUser()
+  }
+
+  const doUpdate = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    const data = JSON.stringify(values2)
+    window.alert(data)
+    updateUser()
   }
 
   useEffect (() => {
@@ -62,25 +88,49 @@ const App = () => {
     return(
       <>
         <div>
-          <form onSubmit={doSubmit}>
-            <label>
-              name:
+          <form onSubmit={doCreate}>
+            name:
+            <input 
+              type="text" 
+              name="name"
+              value={values.name}
+              onChange={doChange}
+            />
+            email:
+            <input 
+              type="text"
+              name="email" 
+              value={values.email}
+              onChange={doChange}
+            />
+            <input type="submit" value="Create" />
+          </form>
+        </div>
+        <div>
+          <form onSubmit={doUpdate}>
+             id:
+              <input 
+                type="number" 
+                name="id"
+                value={values2.id}
+                onChange={doChange2}
+              />
+              name2:
               <input 
                 type="text" 
-                name="name"
-                value={values.name}
-                onChange={doChange}
+                name="name2"
+                value={values2.name2}
+                onChange={doChange2}
               />
-              email:
+              email2:
               <input 
                 type="text"
-                name="email" 
-                value={values.email}
-                onChange={doChange}
+                name="email2" 
+                value={values2.email2}
+                onChange={doChange2}
               />
-            </label>
-            <input type="submit" value="Submit" />
-          </form>
+              <input type="submit" value="Update" />
+            </form>
         </div>
         <div>
           <table className='ui celled table'>
